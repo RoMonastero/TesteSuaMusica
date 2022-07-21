@@ -15,9 +15,9 @@ class MyApp extends StatelessWidget {
       title: 'Teste Sua Música',
       debugShowCheckedModeBanner: false,
       theme: ThemeData(
-        primarySwatch: Colors.blue,
+        primarySwatch: Colors.yellow,
       ),
-      home: const MyHomePage(title: 'Flutter Demo Home Page'),
+      home: const MyHomePage(title: 'Game Lovers App'),
     );
   }
 }
