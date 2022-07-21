@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_staggered_animations/flutter_staggered_animations.dart';
 
 import '../http/games_client.dart';
 import '../models/game.dart';
 import '../models/plataform.dart';
+import 'games_card.dart';
 
 class CustomContent extends StatelessWidget {
   final Plataform plataform;
@@ -19,12 +21,19 @@ class CustomContent extends StatelessWidget {
             case ConnectionState.done:
               List<Game>? games = snapshot.data;
               if (games!.isNotEmpty) {
-                return ListView.builder(
-                  itemCount: games.length,
-                  itemBuilder: (context, index) {
-                    Game game = games[index];
-                    return Text(game.name);
-                  },
+                return AnimationLimiter(
+                  child: GridView.builder(
+                    addAutomaticKeepAlives: true,
+                    physics: const BouncingScrollPhysics(),
+                    gridDelegate:
+                        const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 2),
+                    itemCount: games.length,
+                    itemBuilder: (context, index) {
+                      Game game = games[index];
+                      return GamesCard(game: game);
+                    },
+                  ),
                 );
               } else {
                 return const Text("No Games in this Plataform");

@@ -1,6 +1,7 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
+import 'package:teste_sua_musica/models/cover.dart';
 import 'package:teste_sua_musica/models/game.dart';
 import 'package:teste_sua_musica/models/twitch.dart';
 
@@ -66,5 +67,26 @@ class GamesClient {
         decodedJson.map((json) => Plataform.fromJson(json)).toList();
 
     return plataforms;
+  }
+
+  Future<Cover> getGameImage(int gameId) async {
+    String accessToken = await _getAccessToken();
+    var response = await post(
+      Uri.parse(
+        '$_baseUrl/covers',
+      ),
+      body: 'fields *; where game = $gameId;',
+      headers: {
+        'Client-ID': _clientId,
+        'Authorization': "Bearer $accessToken",
+        'Accept': 'application/json'
+      },
+    );
+
+    final List decodedJson = jsonDecode(response.body);
+
+    final Cover cover = Cover.fromJson(decodedJson[0]);
+
+    return cover;
   }
 }
