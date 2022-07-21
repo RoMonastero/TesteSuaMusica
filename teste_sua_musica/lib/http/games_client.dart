@@ -1,10 +1,10 @@
 import 'dart:convert';
 
 import 'package:http/http.dart';
-import 'package:teste_sua_musica/models/games.dart';
+import 'package:teste_sua_musica/models/game.dart';
 import 'package:teste_sua_musica/models/twitch.dart';
 
-import '../models/plataforms.dart';
+import '../models/plataform.dart';
 
 class GamesClient {
   final String _clientId = '4j7vrfe02zavku0wnxu23h1vq66367';
@@ -22,7 +22,7 @@ class GamesClient {
     return twitchAuth.accessToken;
   }
 
-  Future<List<Games>> getGames() async {
+  Future<List<Game>> getGames() async {
     String accessToken = await _getAccessToken();
 
     var response = await post(
@@ -39,13 +39,13 @@ class GamesClient {
 
     final List decodedJson = jsonDecode(response.body);
 
-    final List<Games> games =
-        decodedJson.map((json) => Games.fromJson(json)).toList();
+    final List<Game> games =
+        decodedJson.map((json) => Game.fromJson(json)).toList();
 
     return games;
   }
 
-  Future<List<Plataforms>> getPlataforms() async {
+  Future<List<Plataform>> getPlataforms() async {
     String accessToken = await _getAccessToken();
 
     var response = await post(
@@ -62,8 +62,8 @@ class GamesClient {
 
     final List decodedJson = jsonDecode(response.body);
 
-    final List<Plataforms> plataforms =
-        decodedJson.map((json) => Plataforms.fromJson(json)).toList();
+    final List<Plataform> plataforms =
+        decodedJson.map((json) => Plataform.fromJson(json)).toList();
 
     return plataforms;
   }
