@@ -1,14 +1,13 @@
 import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:sqflite/sqflite.dart';
 import 'package:teste_sua_musica/components/content_view.dart';
 import 'package:teste_sua_musica/components/custom_tab.dart';
 import 'package:teste_sua_musica/database/dao/plataforms_dao.dart';
 import 'package:teste_sua_musica/http/games_client.dart';
 import 'package:teste_sua_musica/models/plataform.dart';
 
+import '../components/custom_content.dart';
 import '../components/custom_tab_bar.dart';
-import '../database/app_database.dart';
 
 class MyHomePage extends StatefulWidget {
   const MyHomePage({Key? key, required this.title}) : super(key: key);
@@ -39,16 +38,16 @@ class _MyHomePageState extends State<MyHomePage>
       await addPlataforms();
     }
 
+    //Criar componente de tabs que armazena os jogos com o campo plataforms igual ao id das plataformas para mostrar na tela
+
     contentViews = [];
     List<Plataform> plataforms = await _dao.findAll();
     for (var plataform in plataforms) {
       contentViews.add(
         ContentView(
             tab: CustomTab(title: plataform.name),
-            content: SizedBox(
-              child: Text(plataform.name),
-              width: 100,
-              height: 100,
+            content: CustomContent(
+              plataform: plataform,
             )),
       );
     }

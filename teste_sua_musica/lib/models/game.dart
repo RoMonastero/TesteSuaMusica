@@ -1,16 +1,19 @@
 class Game {
   final int id;
   final String name;
-  final String? summary;
+  final String summary;
+  final List platforms;
 
   Game({
     required this.id,
     required this.name,
-    this.summary,
+    required this.platforms,
+    required this.summary,
   });
 
   Game.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         name = json['name'],
-        summary = json['summary'];
+        platforms = json['platforms'] ?? [],
+        summary = json['summary'] ?? '';
 }
