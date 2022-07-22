@@ -38,8 +38,6 @@ class _MyHomePageState extends State<MyHomePage>
       await addPlataforms();
     }
 
-    //Criar componente de tabs que armazena os jogos com o campo plataforms igual ao id das plataformas para mostrar na tela
-
     contentViews = [];
     List<Plataform> plataforms = await _dao.findAll();
     for (var plataform in plataforms) {
