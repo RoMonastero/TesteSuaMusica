@@ -18,6 +18,9 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
+//Fazer segunda tela do projeto e armazenar os dados coletados pela api no database seguindo o modelo do dao
+//Adicionar a estrutura do BLOC e passar as chamadas de funcao para ele
+//Pegar as funcoes do BLOC utilizando o Provider
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
   final GamesClient gamesClient = GamesClient();

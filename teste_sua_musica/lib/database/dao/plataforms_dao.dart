@@ -16,10 +16,10 @@ class PlataformDao {
     final Database db = await creatPlataformDatabase();
     final Map<String, dynamic> plataformMap = toMap(plataform);
 
-    List<Map<String, Object?>> lala = await db.query('plataforms',
+    List<Map<String, Object?>> plataformsList = await db.query('plataforms',
         columns: ['id'], where: 'id = ${plataform.id}');
 
-    if (lala.isEmpty) {
+    if (plataformsList.isEmpty) {
       return await db.insert(_tableName, plataformMap);
     }
   }

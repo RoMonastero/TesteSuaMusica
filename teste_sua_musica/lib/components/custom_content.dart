@@ -36,7 +36,9 @@ class CustomContent extends StatelessWidget {
                   ),
                 );
               } else {
-                return const Text("No Games in this Plataform");
+                return const Center(
+                  child: Text("No Games in this Plataform"),
+                );
               }
 
             case ConnectionState.waiting:
@@ -53,7 +55,7 @@ class CustomContent extends StatelessWidget {
     List<Game> games = await gamesClient.getGames();
     List<Game> gamesByPlataformId = [];
     for (var game in games) {
-      if (game.platforms.isNotEmpty && game.platforms.contains(plataform.id)) {
+      if (game.plataforms.isNotEmpty && game.plataforms.contains(plataform.id)) {
         gamesByPlataformId.add(game);
       }
     }

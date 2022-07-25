@@ -3,6 +3,7 @@ import 'dart:convert';
 import 'package:http/http.dart';
 import 'package:teste_sua_musica/models/cover.dart';
 import 'package:teste_sua_musica/models/game.dart';
+import 'package:teste_sua_musica/models/genre.dart';
 import 'package:teste_sua_musica/models/twitch.dart';
 
 import '../models/plataform.dart';
@@ -67,6 +68,52 @@ class GamesClient {
         decodedJson.map((json) => Plataform.fromJson(json)).toList();
 
     return plataforms;
+  }
+
+  Future<List<Plataform>> getPlataformsByGame(String plataformsId) async {
+    String accessToken = await _getAccessToken();
+
+    var response = await post(
+      Uri.parse(
+        '$_baseUrl/platforms/',
+      ),
+      body: 'fields *; where id = ($plataformsId);',
+      headers: {
+        'Client-ID': _clientId,
+        'Authorization': "Bearer $accessToken",
+        'Accept': 'application/json'
+      },
+    );
+
+    final List decodedJson = jsonDecode(response.body);
+
+    final List<Plataform> plataforms =
+        decodedJson.map((json) => Plataform.fromJson(json)).toList();
+
+    return plataforms;
+  }
+
+  Future<List<Genre>> getGenresByGame(String genresId) async {
+    String accessToken = await _getAccessToken();
+
+    var response = await post(
+      Uri.parse(
+        '$_baseUrl/genres/',
+      ),
+      body: 'fields *; where id = ($genresId);',
+      headers: {
+        'Client-ID': _clientId,
+        'Authorization': "Bearer $accessToken",
+        'Accept': 'application/json'
+      },
+    );
+
+    final List decodedJson = jsonDecode(response.body);
+
+    final List<Genre> genres =
+        decodedJson.map((json) => Genre.fromJson(json)).toList();
+
+    return genres;
   }
 
   Future<Cover> getGameImage(int gameId) async {
