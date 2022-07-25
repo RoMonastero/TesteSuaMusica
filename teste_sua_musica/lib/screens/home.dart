@@ -26,12 +26,12 @@ class _MyHomePageState extends State<MyHomePage>
   final GamesClient gamesClient = GamesClient();
   TabController? tabController;
   List<ContentView> contentViews = [];
-  final PlataformDao _dao = PlataformDao();
+  final PlataformDao _plataformDao = PlataformDao();
 
   Future addPlataforms() async {
     List<Plataform> plataforms = await gamesClient.getPlataforms();
     for (var plataform in plataforms) {
-      _dao.save(plataform);
+      _plataformDao.save(plataform);
     }
   }
 
@@ -42,7 +42,7 @@ class _MyHomePageState extends State<MyHomePage>
     }
 
     contentViews = [];
-    List<Plataform> plataforms = await _dao.findAll();
+    List<Plataform> plataforms = await _plataformDao.findAll();
     for (var plataform in plataforms) {
       contentViews.add(
         ContentView(
@@ -67,7 +67,7 @@ class _MyHomePageState extends State<MyHomePage>
         children: [
           Expanded(
             child: FutureBuilder(
-                initialData: _dao.findAll(),
+                initialData: _plataformDao.findAll(),
                 future: addTabs(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {

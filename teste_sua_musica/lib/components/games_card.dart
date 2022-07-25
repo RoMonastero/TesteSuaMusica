@@ -36,7 +36,9 @@ class GamesCard extends StatelessWidget {
                 return InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: ((context) => GameContent(game: game))));
+                        builder: ((context) => GameContent(
+                              game: game,
+                            ))));
                   },
                   child: CustomCard(game: game),
                 );

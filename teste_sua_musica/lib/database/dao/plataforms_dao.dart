@@ -12,8 +12,8 @@ class PlataformDao {
   static const String _id = 'id';
   static const String _name = 'name';
 
-  save(Plataform plataform) async {
-    final Database db = await creatPlataformDatabase();
+  Future save(Plataform plataform) async {
+    final Database db = await creatDatabase();
     final Map<String, dynamic> plataformMap = toMap(plataform);
 
     List<Map<String, Object?>> plataformsList = await db.query('plataforms',
@@ -32,10 +32,10 @@ class PlataformDao {
   }
 
   Future<List<Plataform>> findAll() async {
-    final Database db = await creatPlataformDatabase();
+    final Database db = await creatDatabase();
     final List<Map<String, dynamic>> maps = await db.query(_tableName);
-    final List<Plataform> contacts = toList(maps);
-    return contacts;
+    final List<Plataform> plataforms = toList(maps);
+    return plataforms;
   }
 
   List<Plataform> toList(List<Map<String, dynamic>> maps) {
