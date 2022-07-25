@@ -1,8 +1,11 @@
+import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
+import 'package:teste_sua_musica/database/dao/genre_dao.dart';
 import 'package:teste_sua_musica/models/genre.dart';
 import 'package:teste_sua_musica/models/plataform.dart';
 
 import '../components/text_description.dart';
+import '../database/dao/plataforms_dao.dart';
 import '../http/games_client.dart';
 import '../models/cover.dart';
 import '../models/game.dart';
@@ -11,6 +14,8 @@ class GameContent extends StatelessWidget {
   final Game game;
   final Cover? cover;
   final GamesClient gamesClient = GamesClient();
+  final GenreDao _genreDao = GenreDao();
+  final PlataformDao _plataformDao = PlataformDao();
 
   GameContent({Key? key, required this.game, this.cover}) : super(key: key);
 
@@ -142,19 +147,44 @@ class GameContent extends StatelessWidget {
   }
 
   Future<List<Plataform>> getPlataformsByGame() async {
-    final String plataformsId = game.plataformsIdToString();
+    final List<Plataform> plataforms = await _plataformDao.findAll();
 
-    final List<Plataform> plataforms =
-        await gamesClient.getPlataformsByGame(plataformsId);
+    List<Plataform> plataformByGameId = [];
+    for (var plataform in plataforms) {
+      if (game.plataforms.isNotEmpty &&
+          game.plataforms.contains(plataform.id.toString())) {
+        plataformByGameId.add(plataform);
+      }
+    }
 
-    return plataforms;
+    return plataformByGameId;
+  }
+
+  Future addGenres() async {
+    final String genresId = game.genresIdToString();
+
+    List<Genre> genres = await gamesClient.getGenresByGame(genresId);
+
+    for (var genre in genres) {
+      _genreDao.save(genre);
+    }
   }
 
   Future<List<Genre>> getGenresByGame() async {
-    final String genresId = game.genresIdToString();
+    var connectivityResult = await (Connectivity().checkConnectivity());
+    if (connectivityResult != ConnectivityResult.none) {
+      await addGenres();
+    }
 
-    final List<Genre> genres = await gamesClient.getGenresByGame(genresId);
+    List<Genre> genres = await _genreDao.findAll();
 
-    return genres;
+    List<Genre> genreByGameId = [];
+    for (var genre in genres) {
+      if (game.genres.isNotEmpty && game.genres.contains(genre.id.toString())) {
+        genreByGameId.add(genre);
+      }
+    }
+
+    return genreByGameId;
   }
 }

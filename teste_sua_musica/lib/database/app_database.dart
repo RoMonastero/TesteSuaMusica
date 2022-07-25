@@ -2,6 +2,7 @@ import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 
 import 'dao/games_dao.dart';
+import 'dao/genre_dao.dart';
 import 'dao/plataforms_dao.dart';
 
 Future<Database> creatDatabase() async {
@@ -12,6 +13,7 @@ Future<Database> creatDatabase() async {
     onCreate: (db, version) async {
       await db.execute(PlataformDao.tableSql);
       await db.execute(GamesDao.tableSql);
+      await db.execute(GenreDao.tableSql);
     },
     version: 1,
     onDowngrade: onDatabaseDowngradeDelete,
