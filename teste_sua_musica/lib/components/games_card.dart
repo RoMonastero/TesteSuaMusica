@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:teste_sua_musica/container/game_content_container.dart';
 import 'package:teste_sua_musica/models/game.dart';
-import 'package:teste_sua_musica/screens/game_contente.dart';
 
 import '../http/games_client.dart';
 import '../models/cover.dart';
@@ -25,7 +25,7 @@ class GamesCard extends StatelessWidget {
                 return InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: ((context) => GameContent(
+                        builder: ((context) => GameContentContainer(
                               game: game,
                               cover: cover,
                             ))));
@@ -36,7 +36,7 @@ class GamesCard extends StatelessWidget {
                 return InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(
-                        builder: ((context) => GameContent(
+                        builder: ((context) => GameContentContainer(
                               game: game,
                             ))));
                   },

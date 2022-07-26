@@ -1,12 +1,7 @@
-import 'package:connectivity_plus/connectivity_plus.dart';
 import 'package:flutter/material.dart';
-import 'package:teste_sua_musica/components/content_view.dart';
-import 'package:teste_sua_musica/components/custom_tab.dart';
-import 'package:teste_sua_musica/database/dao/plataforms_dao.dart';
-import 'package:teste_sua_musica/http/games_client.dart';
-import 'package:teste_sua_musica/models/plataform.dart';
-
-import '../components/custom_content.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import '../bloc/tab_cubit.dart';
+import '../components/content_view.dart';
 import '../components/custom_tab_bar.dart';
 
 class MyHomePage extends StatefulWidget {
@@ -18,42 +13,9 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-//Fazer segunda tela do projeto e armazenar os dados coletados pela api no database seguindo o modelo do dao
 //Adicionar a estrutura do BLOC e passar as chamadas de funcao para ele
-//Pegar as funcoes do BLOC utilizando o Provider
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
-  final GamesClient gamesClient = GamesClient();
-  TabController? tabController;
-  List<ContentView> contentViews = [];
-  final PlataformDao _plataformDao = PlataformDao();
-
-  Future addPlataforms() async {
-    List<Plataform> plataforms = await gamesClient.getPlataforms();
-    for (var plataform in plataforms) {
-      _plataformDao.save(plataform);
-    }
-  }
-
-  Future addTabs() async {
-    var connectivityResult = await (Connectivity().checkConnectivity());
-    if (connectivityResult != ConnectivityResult.none) {
-      await addPlataforms();
-    }
-
-    contentViews = [];
-    List<Plataform> plataforms = await _plataformDao.findAll();
-    for (var plataform in plataforms) {
-      contentViews.add(
-        ContentView(
-            tab: CustomTab(title: plataform.name),
-            content: CustomContent(
-              plataform: plataform,
-            )),
-      );
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -67,27 +29,28 @@ class _MyHomePageState extends State<MyHomePage>
         children: [
           Expanded(
             child: FutureBuilder(
-                initialData: _plataformDao.findAll(),
-                future: addTabs(),
+                future: context.read<TabCubit>().addTabs(),
                 builder: (context, snapshot) {
                   switch (snapshot.connectionState) {
                     case ConnectionState.done:
-                      return DefaultTabController(
-                        length: contentViews.length,
-                        child: Column(
-                          children: [
-                            CustomTabBar(
-                              tabs: contentViews.map((e) => e.tab).toList(),
-                            ),
-                            Expanded(
-                              child: TabBarView(
-                                  children: contentViews
-                                      .map((e) => e.content)
-                                      .toList()),
-                            ),
-                          ],
-                        ),
-                      );
+                      return BlocBuilder<TabCubit, List<ContentView>>(
+                          builder: (context, state) {
+                        return DefaultTabController(
+                          length: state.length,
+                          child: Column(
+                            children: [
+                              CustomTabBar(
+                                tabs: state.map((e) => e.tab).toList(),
+                              ),
+                              Expanded(
+                                child: TabBarView(
+                                    children:
+                                        state.map((e) => e.content).toList()),
+                              ),
+                            ],
+                          ),
+                        );
+                      });
 
                     default:
                       return Container();
