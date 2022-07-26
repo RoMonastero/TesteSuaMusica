@@ -13,9 +13,15 @@ class MyHomePage extends StatefulWidget {
   State<MyHomePage> createState() => _MyHomePageState();
 }
 
-//Adicionar a estrutura do BLOC e passar as chamadas de funcao para ele
 class _MyHomePageState extends State<MyHomePage>
     with SingleTickerProviderStateMixin {
+  @override
+  void initState() {
+    context.read<TabCubit>().addTabs();
+    
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(

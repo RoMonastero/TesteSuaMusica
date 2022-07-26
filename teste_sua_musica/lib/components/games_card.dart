@@ -9,7 +9,7 @@ import 'loading_card.dart';
 
 class GamesCard extends StatelessWidget {
   final Game game;
-  final GamesClient gamesClient = GamesClient();
+  final GamesClient _gamesClient = GamesClient();
   GamesCard({Key? key, required this.game}) : super(key: key);
 
   @override
@@ -51,6 +51,6 @@ class GamesCard extends StatelessWidget {
   }
 
   Future<Cover> gameImage() async {
-    return gamesClient.getGameImage(game.id);
+    return _gamesClient.getGameImage(game.id);
   }
 }

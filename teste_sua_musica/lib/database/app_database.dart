@@ -16,6 +16,5 @@ Future<Database> creatDatabase() async {
       await db.execute(GenreDao.tableSql);
     },
     version: 1,
-    onDowngrade: onDatabaseDowngradeDelete,
   );
 }
